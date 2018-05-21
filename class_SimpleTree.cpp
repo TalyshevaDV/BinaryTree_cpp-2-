@@ -61,21 +61,26 @@ tree_element* SimpleTree::insert_pre(tree_element* elem, tree_element* root) {
     }
     return (cur_root);
 }
-bool SimpleTree::exists(int value)
+bool SimpleTree::exists(int value)                 //добавлена проверка value
 {
+    if (value == 0) {
+    return 0;
+  } else if (value != 0) {
     tree_element* cur_element = this->find(value);
-    return find(value) != NULL ;
+    return find(value) != NULL;
+  }
 }
 
-tree_element* SimpleTree::find1(int value, tree_element* root) 
-{
+tree_element* SimpleTree::find1(int value, tree_element* root)  //другая последовательность условий на cur_element
+{                                                               //сначала проверка на NULL
     tree_element* cur_element = root;
-    if (cur_element->value == value) {
-        return cur_element;
-    } else if (cur_element == NULL) {
+    if (cur_element == NULL) {
         return NULL;
+    } else if (cur_element->value == value && cur_element->value != 0) {
+        return cur_element;
     
-     
+    } else if (cur_element->right == NULL || cur_element->left == NULL) {   // проверка на NULL right и left
+        return NULL;
     } else if (cur_element->value < value && cur_element->right != NULL) {
         return find1(value, cur_element->right);
     } else if (cur_element->value > value && cur_element->left != NULL) {
@@ -134,15 +139,12 @@ tree_element* SimpleTree::search1(tree_element* elem)
 
 void SimpleTree::remove(int value)
 {
-    tree_element* elem = this->find(value);
-    printf("%d\n", elem->value);
-    printf("%d\n", elem->parent->value);
+    tree_element* elem = this->find(value); // здесь были удалены два ненужных printf-а
 
     if(elem == NULL)
-    {
-        printf("Element doesn't found: %d\n", elem->value);
+    {                                       // и здесь тоже
         return;
-   } else if(elem->left==NULL && elem->right==NULL) {
+    } else if(elem->left==NULL && elem->right==NULL) {
         if (elem->parent->left== elem){
             free(elem);
             printf("%d\n", elem->parent->left->value);
