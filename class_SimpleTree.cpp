@@ -18,7 +18,7 @@ void SimpleTree::deletion(tree_element* element)
     if (element != NULL){
         deletion(element->left);
         deletion(element->right);
-        free(element);
+        delete(element);
         cout << "Element deleted" << endl;
     }
 }
@@ -150,11 +150,11 @@ void SimpleTree::remove(int value)
         return;
     } else if(elem->left==NULL && elem->right==NULL) {
         if (elem->parent->left== elem){
-            free(elem);
+            delete(elem);
             printf("%d\n", elem->parent->left->value);
             elem->parent->left=NULL;
         } else if(elem->parent->right == elem) {
-            free(elem);
+            delete(elem);
             printf("элемент здесь\n");
             printf("%d\n", elem->parent->right->value);
             elem->parent->right=NULL;
@@ -163,38 +163,38 @@ void SimpleTree::remove(int value)
         if (elem->left!=NULL && elem->right == NULL) { //добавлено второе условие
             if (elem->value < elem->parent->value) {
                 elem->parent->left = elem->left;       //теперь указатель указывает куда нужно
-                free(elem);
+                delete(elem);
             } else if (elem->value > elem->parent->value) {
                 elem->parent->right = elem->left;
-                free(elem);
+                delete(elem);
             }
         } else if (elem->right!=NULL && elem->left == NULL) {  //здесь добавлено условие для корневого элемента
             if (elem->parent != NULL) {
               if (elem->value < elem->parent->value){
                   elem->parent->left = elem->right;
-                  free(elem);
+                  delete(elem);
               } else if (elem->value > elem->parent->value){
                   elem->parent->right = elem->right;
-                  free(elem);
+                  delete(elem);
               }
             } else if (elem->parent == NULL) {
                 elem->right->parent == NULL;
-                free(elem);
+                delete(elem);
         } else if (elem->left!=NULL && elem->right!=NULL) {
             if (elem->left != NULL) {
                 if (elem->value < elem->parent->value) {
                     elem->parent->left = search1(elem);
-                    free(elem);
+                    delete(elem);
                 } else if (elem->value > elem->parent->value) {
                     elem->parent->left = search(elem);
-                    free(elem);
+                    delete(elem);
                 } else if (elem->right != NULL) {
                     if (elem->value < elem->parent->value) {
                     elem->parent->left = search1(elem);
-                    free(elem);
+                    delete(elem);
                 } else if (elem->value > elem->parent->value) {
                     elem->parent->left = search(elem);
-                    free(elem);
+                    delete(elem);
                 }
                 }
             }
