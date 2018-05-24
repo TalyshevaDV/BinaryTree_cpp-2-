@@ -79,13 +79,17 @@ tree_element* SimpleTree::find1(int value, tree_element* root)  //другая �
     } else if (cur_element->value == value && cur_element->value != 0) {
         return cur_element;
     
-    } else if (cur_element->right == NULL || cur_element->left == NULL) {   // проверка на NULL right и left
-        return NULL;
-    } else if (cur_element->value < value && cur_element->right != NULL) {
+    } else if (cur_element->value < value && cur_element->right != NULL) {         //ситуация, если нужно идти туда, где NULL
         return find1(value, cur_element->right);
+    } else if (cur_element->value < value && cur_element->right == NULL) {
+        return NULL;
     } else if (cur_element->value > value && cur_element->left != NULL) {
         return find1(value, cur_element->left);
-    } 
+    } else if (cur_element->value > value && cur_element->left == NULL) {
+          return NULL;
+    } else if (cur_element->right == NULL || cur_element->left == NULL) {
+        return NULL;
+    }
 }
 
 tree_element* SimpleTree::find(int value)
@@ -156,22 +160,26 @@ void SimpleTree::remove(int value)
             elem->parent->right=NULL;
         }
     } else if (elem->left!=NULL || elem->right!=NULL) {
-        if (elem->left!=NULL) {
+        if (elem->left!=NULL && elem->right == NULL) { //добавлено второе условие
             if (elem->value < elem->parent->value) {
-                elem->parent->left = elem->left->left;
+                elem->parent->left = elem->left;       //теперь указатель указывает куда нужно
                 free(elem);
             } else if (elem->value > elem->parent->value) {
-                elem->parent->right = elem->left->left;
+                elem->parent->right = elem->left;
                 free(elem);
             }
-        } else if (elem->right!=NULL) {
-            if (elem->value < elem->parent->value){
-                elem->parent->left = elem->right->right;
+        } else if (elem->right!=NULL && elem->left == NULL) {  //здесь добавлено условие для корневого элемента
+            if (elem->parent != NULL) {
+              if (elem->value < elem->parent->value){
+                  elem->parent->left = elem->right;
+                  free(elem);
+              } else if (elem->value > elem->parent->value){
+                  elem->parent->right = elem->right;
+                  free(elem);
+              }
+            } else if (elem->parent == NULL) {
+                elem->right->parent == NULL;
                 free(elem);
-            } else if (elem->value > elem->parent->value){
-                elem->parent->right = elem->right->right;
-                free(elem);
-            }
         } else if (elem->left!=NULL && elem->right!=NULL) {
             if (elem->left != NULL) {
                 if (elem->value < elem->parent->value) {
